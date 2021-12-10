@@ -7,6 +7,7 @@
  - List general account movements (deposits/withdraws)
  - Take commissions into consideration when calculating a position PL
  - Support multiple report languages (we parse a lot of descriptions and degiro translates some of them)
+ - Support column sorting
 
 ## Project setup
 ```
