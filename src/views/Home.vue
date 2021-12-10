@@ -7,7 +7,8 @@
   </p>
 
   <div class="mb-5">
-    <a href="../examples/" class="btn btn-primary btn-lg px-4">Select positions CSV</a>
+    <input ref="fileInput" type="file" @change="loadCsv" class="visually-hidden" accept=".csv">
+    <button class="btn btn-primary btn-lg px-4" @click.prevent="this.$refs.fileInput.click()">Select positions CSV</button>
   </div>
 
   <hr class="col-3 col-md-2 mb-5">
@@ -36,9 +37,63 @@
 </template>
 
 <script>
+import Papa from 'papaparse'
+
 export default {
   name: 'Home',
-  components: {
+  data: function () {
+    return {
+      columnMapping: {
+        0: 'date',
+        1: 'hour',
+        3: 'product',
+        4: 'productCode',
+        5: 'description',
+        6: 'exchangeRate',
+        7: 'changeCurrency',
+        8: 'changeAmount',
+        9: 'balanceCurrency',
+        10: 'balanceAmount',
+        11: 'orderId'
+      }
+    }
+  },
+  methods: {
+    loadCsv (event) {
+      const file = event.target.files[0]
+      const reader = new FileReader()
+
+      reader.onload = (res) => {
+        this.parseCsv(res.target.result)
+      }
+      reader.onerror = (err) => console.log(err)
+      reader.readAsText(file)
+    },
+    parseCsv (fileContents) {
+      var rawLines = Papa.parse(fileContents).data.reverse()
+      var parsedLines = []
+
+      // Loop ends in length -1, because the list is reversed, soo last line is headers
+      for (let i = 0; i < (rawLines.length - 1); i++) {
+        const lineData = {}
+        Object.entries(this.columnMapping).forEach(([key, value]) => {
+          lineData[value] = rawLines[i][key]
+        })
+
+        lineData.exchangeRate = parseFloat((lineData.exchangeRate || '').replace(',', '.'))
+        lineData.changeAmount = parseFloat((lineData.changeAmount || '').replace(',', '.'))
+        lineData.balanceAmount = parseFloat((lineData.balanceAmount || '').replace(',', '.'))
+
+        if (lineData.date !== '') {
+          parsedLines.push(lineData)
+        }
+      }
+
+      this.$store.commit('loadRawRows', parsedLines)
+      this.$store.dispatch('processData').then(() => {
+        this.$router.push({ name: 'Analysis' })
+      })
+    }
   }
 }
 </script>
