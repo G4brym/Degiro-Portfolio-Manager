@@ -1,5 +1,36 @@
 # Degiro-Portfolio-Manager
 
+This is a simple Portfolio tracker that doesn't need you account logins or api keys to import data.
+The only thing this application needs is just an account statement report that you manually can extract from your
+Degiro account.
+
+That report includes all the activity that goes on your account (including the flatex bank account) and all the hidden
+fees that you don't see daily.
+
+This tool aspires to shed some light over theses hidden transactions, and also it is ment to be an easier way to
+inspect your profile, check open and closed positions and help you fill your investment taxes.
+
+Because this tool is pure javascript it can run right on your browser, and it will never send your account statement
+anywhere! you can check that is this github repository.
+
+This tool is still under development and there is a big list of work left to do, take that into consideration when trying it
+
+[Try the tool at this URL](https://g4brym.github.io/Degiro-Portfolio-Manager/)
+
+## Application screenshots
+Home Page
+![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/master/docs/home.png)
+
+Open Positions
+![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/master/docs/open_positions.png)
+
+Closed Positions
+![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/master/docs/closed_positions.png)
+
+Commissions
+![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/master/docs/commissions.png)
+
+
 ## TODO
  - Breakdown commissions into more details
  - Calculate "current" PL for open positions
