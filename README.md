@@ -32,12 +32,14 @@ Commissions
 
 
 ## TODO
- - Breakdown commissions into more details
- - Calculate "current" PL for open positions
+ - ~~Breakdown commissions into more details~~
+ - ~~Calculate "current" PL for open positions~~
+ - Export all generated lists to csv
+ - Select the fiscal year to see positions + commissions
  - List Dividend transactions
  - List general account movements (deposits/withdraws)
- - Take commissions into consideration when calculating a position PL
- - Support multiple report languages (we parse a lot of descriptions and degiro translates some of them)
+ - ~~Take commissions into consideration when calculating a position PL~~
+ - ~~Support multiple report languages (we parse a lot of descriptions and degiro translates some of them)~~
  - Support column sorting
 
 ## Project setup

@@ -23,6 +23,7 @@ export default createStore({
   mutations: {
     loadRawRows (state, rawRows) {
       state.rawRows = rawRows
+      state.currency = rawRows[0].currencySymbol
     },
     loadProcessedData (state, payload) {
       console.log(payload)

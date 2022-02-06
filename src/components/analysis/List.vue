@@ -32,7 +32,7 @@ export default {
           id: key,
           name: this.$store.state.productNames[key],
           units,
-          'average price': averagePrice.toFixed(2) + '€'
+          'average price': averagePrice.toFixed(2) + this.$store.state.currency
         })
       })
 
@@ -55,7 +55,7 @@ export default {
           id: key,
           name: this.$store.state.productNames[key],
           units,
-          pl: sumPl.toFixed(2) + '€',
+          pl: sumPl.toFixed(2) + this.$store.state.currency,
           'average pl percentage': (sumPlPercentage / units).toFixed(2) + '%'
         })
       })
@@ -64,23 +64,12 @@ export default {
     },
     buildCommissionsData () {
       var processed = []
-      var processing = {}
 
-      this.$store.state.transactions.commissions.forEach(function (row) {
-        if (!(row.description in processing)) {
-          processing[row.description] = {
-            amount: 0
-          }
-        }
-
-        processing[row.description].amount += row.changeAmount
-      })
-
-      Object.entries(processing).forEach(([key, value]) => {
+      Object.entries(this.$store.state.calculated.commissions.positions).forEach(([key, value]) => {
         processed.push({
           id: key,
-          name: key,
-          amount: value.amount.toFixed(2) + '€'
+          name: this.$store.state.productNames[key],
+          'Total Commissions': value.toFixed(2) + this.$store.state.currency
         })
       })
 

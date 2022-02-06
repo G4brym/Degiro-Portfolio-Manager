@@ -20,7 +20,7 @@
           </span>
         </div>
         <div class="card-body">
-          <p class="card-text">{{$store.state.calculated.realizedPl.toFixed(2)}}€ Profit/Loss</p>
+          <p class="card-text">{{$store.state.calculated.realizedPl.toFixed(2)}}{{$store.state.currency}} Profit/Loss</p>
         </div>
       </div>
     </div>
@@ -32,7 +32,7 @@
           </span>
         </div>
         <div class="card-body">
-          <p class="card-text">{{$store.state.calculated.commissions.toFixed(2)}}€ commissions</p>
+          <p class="card-text">{{$store.state.calculated.commissions.sum.toFixed(2)}}{{$store.state.currency}} commissions</p>
         </div>
       </div>
     </div>
