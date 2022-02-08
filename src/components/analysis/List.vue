@@ -1,19 +1,24 @@
 <template>
   <div class="row">
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <template v-for="(value, key) in tableData[0]" :key="key">
-          <td class="fw-bold text-capitalize" v-text="key"></td>
-        </template>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="row in tableData" :key="row.id">
-        <td v-for="(value, key) in row" :key="key" v-text="value"></td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <template v-for="(value, key) in tableData[0]" :key="key">
+            <td class="fw-bold text-capitalize" v-text="key"></td>
+          </template>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="row in tableData" :key="row.id">
+          <td v-for="(value, key) in row" :key="key" v-text="value"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div>
+    <button type="button" class="btn btn-success btn-sm" @click="exportAsCsv">Export as CSV</button>
   </div>
 </template>
 
@@ -21,6 +26,25 @@
 export default {
   props: ['selectedTab'],
   methods: {
+    exportAsCsv () {
+      var data = this.tableData
+      var listData = []
+
+      listData.push(Object.keys(data[0]))
+
+      data.forEach((row) => {
+        listData.push(Object.values(row))
+      })
+
+      const csvContent = 'data:text/csv;charset=utf-8,' + listData.map(e => e.join(',')).join('\n')
+
+      var encodedUri = encodeURI(csvContent)
+      var link = document.createElement('a')
+      link.setAttribute('href', encodedUri)
+      link.setAttribute('download', 'exported.csv')
+      document.body.appendChild(link)
+      link.click()
+    },
     buildOpenPositionsData () {
       var processed = []
 
@@ -29,7 +53,7 @@ export default {
         var averagePrice = value.reduce((a, b) => a + b, 0) / units
 
         processed.push({
-          id: key,
+          ISIN: key,
           name: this.$store.state.productNames[key],
           units,
           'average price': averagePrice.toFixed(2) + this.$store.state.currency
@@ -52,7 +76,7 @@ export default {
         })
 
         processed.push({
-          id: key,
+          ISIN: key,
           name: this.$store.state.productNames[key],
           units,
           pl: sumPl.toFixed(2) + this.$store.state.currency,
@@ -67,7 +91,7 @@ export default {
 
       Object.entries(this.$store.state.calculated.commissions.positions).forEach(([key, value]) => {
         processed.push({
-          id: key,
+          ISIN: key,
           name: this.$store.state.productNames[key],
           'Total Commissions': value.toFixed(2) + this.$store.state.currency
         })

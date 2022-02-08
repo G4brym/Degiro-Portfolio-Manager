@@ -34,7 +34,7 @@ Commissions
 ## TODO
  - ~~Breakdown commissions into more details~~
  - ~~Calculate "current" PL for open positions~~
- - Export all generated lists to csv
+ - ~~Export all generated lists to csv~~
  - Select the fiscal year to see positions + commissions
  - List Dividend transactions
  - List general account movements (deposits/withdraws)
