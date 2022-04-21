@@ -65,6 +65,11 @@ export default {
           closedPositions[order.productCode] = []
         }
 
+        var commissionPerUnit = 0
+        if (!isNaN(order.commission)) {
+          commissionPerUnit = order.commission / order.quantityChange
+        }
+
         for (let i = 0; i < order.quantityChange; i++) {
           var purchasePrice = openPositions[order.productCode].shift()
           var pl = order.averagePrice - purchasePrice
@@ -77,7 +82,8 @@ export default {
             openPrice: purchasePrice,
             closePrice: order.averagePrice,
             pl: pl,
-            plPercentage: order.averagePrice * 100 / purchasePrice - 100
+            plPercentage: order.averagePrice * 100 / purchasePrice - 100,
+            commission: commissionPerUnit
           })
         }
       }

@@ -18,7 +18,8 @@
     </div>
   </div>
   <div>
-    <button type="button" class="btn btn-success btn-sm" @click="exportAsCsv">Export as CSV</button>
+    <button type="button" class="btn btn-success btn-sm me-2" @click="exportAsCsv">Export as CSV</button>
+    <button v-if="this.selectedTab === 1" type="button" class="btn btn-success btn-sm" @click="exportTaxReport">Export Tax Report</button>
   </div>
 </template>
 
@@ -27,11 +28,47 @@ export default {
   props: ['selectedTab'],
   methods: {
     exportAsCsv () {
-      var data = this.tableData
+      this.downloadCsv(this.tableData, 'export')
+    },
+    exportTaxReport () {
+      var data = []
+
+      Object.entries(this.$store.state.closedPositions).forEach(([key, rows]) => {
+        var sumBuy = 0
+        var sumSell = 0
+        var commissions = 0
+        var units = rows.length
+
+        rows.forEach(function (row) {
+          sumBuy += row.openPrice
+          sumSell += row.closePrice
+          if (!isNaN(row.commission)) {
+            commissions += row.commission
+          }
+        })
+
+        var totalBuys = sumBuy.toFixed(2)
+        var totalSells = sumSell.toFixed(2)
+        commissions = commissions.toFixed(2)
+        var total = (totalSells - totalBuys - commissions).toFixed(2)
+
+        data.push({
+          ISIN: key,
+          name: this.$store.state.productNames[key].replace(',', ''), // TODO: implement a safe output
+          units,
+          totalBuys: totalBuys + this.$store.state.currency,
+          totalSells: totalSells + this.$store.state.currency,
+          commissions: commissions + this.$store.state.currency,
+          total: total + this.$store.state.currency
+        })
+      })
+
+      this.downloadCsv(data, 'tax_report')
+    },
+    downloadCsv (data, filename) {
       var listData = []
 
       listData.push(Object.keys(data[0]))
-
       data.forEach((row) => {
         listData.push(Object.values(row))
       })
@@ -41,7 +78,7 @@ export default {
       var encodedUri = encodeURI(csvContent)
       var link = document.createElement('a')
       link.setAttribute('href', encodedUri)
-      link.setAttribute('download', 'exported.csv')
+      link.setAttribute('download', filename + '.csv')
       document.body.appendChild(link)
       link.click()
     },
