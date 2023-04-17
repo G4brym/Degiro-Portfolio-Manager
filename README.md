@@ -15,7 +15,7 @@ anywhere! you can check that is this github repository.
 
 This tool is still under development and there is a big list of work left to do, take that into consideration when trying it
 
-[Try the tool at this URL](https://stocks-tax-manager.massadas.com/)
+[Try the tool at this URL](https://degiro-portfolio-manager.massadas.com/)
 
 ## Application screenshots
 Home Page
@@ -35,7 +35,7 @@ Commissions
  - ~~Breakdown commissions into more details~~
  - ~~Calculate "current" PL for open positions~~
  - ~~Export all generated lists to csv~~
- - Select the fiscal year to see positions + commissions
+ - ~~Select the fiscal year to see positions + commissions~~
  - List Dividend transactions
  - List general account movements (deposits/withdraws)
  - ~~Take commissions into consideration when calculating a position PL~~
