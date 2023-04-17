@@ -7,7 +7,7 @@ Degiro account.
 That report includes all the activity that goes on your account (including the flatex bank account) and all the hidden
 fees that you don't see daily.
 
-This tool aspires to shed some light over theses hidden transactions, and also it is ment to be an easier way to
+This tool aspires to shed some light over theses hidden transactions, and also it is meant to be an easier way to
 inspect your profile, check open and closed positions and help you fill your investment taxes.
 
 Because this tool is pure javascript it can run right on your browser, and it will never send your account statement
@@ -15,20 +15,20 @@ anywhere! you can check that is this github repository.
 
 This tool is still under development and there is a big list of work left to do, take that into consideration when trying it
 
-[Try the tool at this URL](https://g4brym.github.io/Degiro-Portfolio-Manager/)
+[Try the tool at this URL](https://stocks-tax-manager.massadas.com/)
 
 ## Application screenshots
 Home Page
-![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/master/docs/home.png)
+![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/main/docs/home.png)
 
 Open Positions
-![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/master/docs/open_positions.png)
+![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/main/docs/open_positions.png)
 
 Closed Positions
-![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/master/docs/closed_positions.png)
+![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/main/docs/closed_positions.png)
 
 Commissions
-![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/master/docs/commissions.png)
+![Home Page](https://github.com/G4brym/Degiro-Portfolio-Manager/raw/main/docs/commissions.png)
 
 
 ## TODO

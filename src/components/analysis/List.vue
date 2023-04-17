@@ -1,26 +1,28 @@
 <template>
-  <div class="row">
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-        <tr>
-          <template v-for="(value, key) in tableData[0]" :key="key">
-            <td class="fw-bold text-capitalize" v-text="key"></td>
-          </template>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="row in tableData" :key="row.id">
-          <td v-for="(value, key) in row" :key="key" v-text="value"></td>
-        </tr>
-        </tbody>
-      </table>
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <template v-for="(value, key) in tableData[0]" :key="key">
+                        <td class="fw-bold text-capitalize" v-text="key"></td>
+                    </template>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="row in tableData" :key="row.id">
+                    <td v-for="(value, key) in row" :key="key" v-text="value"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
-  <div>
-    <button type="button" class="btn btn-success btn-sm me-2" @click="exportAsCsv">Export as CSV</button>
-    <button v-if="this.selectedTab === 1" type="button" class="btn btn-success btn-sm" @click="exportTaxReport">Export Tax Report</button>
-  </div>
+    <div>
+        <button class="btn btn-success btn-sm me-2" type="button" @click="exportAsCsv">Export as CSV</button>
+        <button v-if="this.selectedTab === 1" class="btn btn-success btn-sm" type="button" @click="exportTaxReport">
+            Export Tax Report
+        </button>
+    </div>
 </template>
 
 <script>
