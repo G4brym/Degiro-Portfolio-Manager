@@ -1,4 +1,12 @@
 <template>
+    <div class="form-group mb-5" v-if="this.selectedTab === 1">
+        <label for="exampleSelect1" class="form-label mt-4">Tax year</label>
+        <select class="form-select" id="selectedYear" v-model="selectedYear">
+            <option :value="null">All</option>
+            <option v-for="year in Object.keys($store.state.closedPositions)" :key="year" :value="year"
+                    v-text="year"></option>
+        </select>
+    </div>
     <div class="row">
         <div class="table-responsive">
             <table class="table table-striped">
@@ -28,6 +36,12 @@
 <script>
 export default {
   props: ['selectedTab'],
+  data: function () {
+    return {
+      tableData: [],
+      selectedYear: null
+    }
+  },
   methods: {
     exportAsCsv () {
       this.downloadCsv(this.tableData, 'export')
@@ -35,35 +49,41 @@ export default {
     exportTaxReport () {
       var data = []
 
-      Object.entries(this.$store.state.closedPositions).forEach(([key, rows]) => {
-        var sumBuy = 0
-        var sumSell = 0
-        var commissions = 0
-        var units = rows.length
+      for (const [year, positions] of Object.entries(this.$store.state.closedPositions)) {
+        if (this.selectedYear !== null && this.selectedYear !== year) {
+          continue
+        }
 
-        rows.forEach(function (row) {
-          sumBuy += row.openPrice
-          sumSell += row.closePrice
-          if (!isNaN(row.commission)) {
-            commissions += row.commission
-          }
-        })
+        for (const [key, rows] of Object.entries(positions)) {
+          var sumBuy = 0
+          var sumSell = 0
+          var commissions = 0
+          var units = rows.length
 
-        var totalBuys = sumBuy.toFixed(2)
-        var totalSells = sumSell.toFixed(2)
-        commissions = commissions.toFixed(2)
-        var total = (totalSells - totalBuys - commissions).toFixed(2)
+          rows.forEach(function (row) {
+            sumBuy += row.openPrice
+            sumSell += row.closePrice
+            if (!isNaN(row.commission)) {
+              commissions += row.commission
+            }
+          })
 
-        data.push({
-          ISIN: key,
-          name: this.$store.state.productNames[key].replace(',', ''), // TODO: implement a safe output
-          units,
-          totalBuys: totalBuys + this.$store.state.currency,
-          totalSells: totalSells + this.$store.state.currency,
-          commissions: commissions + this.$store.state.currency,
-          total: total + this.$store.state.currency
-        })
-      })
+          var totalBuys = sumBuy.toFixed(2)
+          var totalSells = sumSell.toFixed(2)
+          commissions = commissions.toFixed(2)
+          var total = (totalSells - totalBuys - commissions).toFixed(2)
+
+          data.push({
+            ISIN: key,
+            name: this.$store.state.productNames[key].replace(',', ''), // TODO: implement a safe output
+            units,
+            totalBuys: totalBuys + this.$store.state.currency,
+            totalSells: totalSells + this.$store.state.currency,
+            commissions: commissions + this.$store.state.currency,
+            total: total + this.$store.state.currency
+          })
+        }
+      }
 
       this.downloadCsv(data, 'tax_report')
     },
@@ -104,24 +124,31 @@ export default {
     buildClosedPositionsData () {
       var processed = []
 
-      Object.entries(this.$store.state.closedPositions).forEach(([key, rows]) => {
-        var sumPl = 0
-        var sumPlPercentage = 0
-        var units = rows.length
+      for (const [year, positions] of Object.entries(this.$store.state.closedPositions)) {
+        if (this.selectedYear !== null && this.selectedYear !== year) {
+          continue
+        }
 
-        rows.forEach(function (row) {
-          sumPl += row.pl
-          sumPlPercentage += row.plPercentage
-        })
+        for (const [key, rows] of Object.entries(positions)) {
+          var sumPl = 0
+          var sumPlPercentage = 0
+          var units = rows.length
 
-        processed.push({
-          ISIN: key,
-          name: this.$store.state.productNames[key],
-          units,
-          pl: sumPl.toFixed(2) + this.$store.state.currency,
-          'average pl percentage': (sumPlPercentage / units).toFixed(2) + '%'
-        })
-      })
+          rows.forEach(function (row) {
+            sumPl += row.pl
+            sumPlPercentage += row.plPercentage
+          })
+
+          processed.push({
+            year: year,
+            ISIN: key,
+            name: this.$store.state.productNames[key],
+            units,
+            pl: sumPl.toFixed(2) + this.$store.state.currency,
+            'average pl percentage': (sumPlPercentage / units).toFixed(2) + '%'
+          })
+        }
+      }
 
       return processed
     },
@@ -139,17 +166,28 @@ export default {
       return processed
     }
   },
-  computed: {
-    tableData: function () {
-      if (this.selectedTab === 0) {
-        return this.buildOpenPositionsData()
-      } else if (this.selectedTab === 1) {
-        return this.buildClosedPositionsData()
-      } else if (this.selectedTab === 2) {
-        return this.buildCommissionsData()
+  mounted () {
+    this.tableData = this.buildOpenPositionsData()
+  },
+  watch: {
+    selectedTab (newValue, oldValue) {
+      if (newValue !== oldValue || !this.selectedTab || this.tableData.length === 0) {
+        if (this.selectedTab === 0) {
+          this.tableData = this.buildOpenPositionsData()
+        } else if (this.selectedTab === 1) {
+          this.tableData = this.buildClosedPositionsData()
+        } else if (this.selectedTab === 2) {
+          this.tableData = this.buildCommissionsData()
+        } else {
+          this.tableData = this.$store.state.closedPositions
+        }
       }
-      return this.$store.state.closedPositions
+    },
+    selectedYear () {
+      if (this.selectedTab === 1) {
+        this.tableData = this.buildClosedPositionsData()
+      }
     }
-  }
+  },
 }
 </script>

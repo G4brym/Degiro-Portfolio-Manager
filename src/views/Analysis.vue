@@ -1,6 +1,8 @@
 <template>
-    <Top v-model:selectedTab="selectedTab" class="mb-4"/>
-    <List :selectedTab="selectedTab"/>
+    <template v-if="this.$store.state.rawRows.length>0">
+        <Top v-model:selectedTab="selectedTab" class="mb-4"/>
+        <List :selectedTab="selectedTab"/>
+    </template>
 </template>
 
 <script>

@@ -26,7 +26,6 @@ export default createStore({
       state.currency = rawRows[0].currencySymbol
     },
     loadProcessedData (state, payload) {
-      console.log(payload)
       state.transactions = payload.transactions
 
       state.closedPositions = payload.positions.closedPositions

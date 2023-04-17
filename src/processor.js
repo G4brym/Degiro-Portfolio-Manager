@@ -60,11 +60,6 @@ export default {
           }
         }
 
-        // Make sure closed product is in closed positions
-        if (!(order.productCode in closedPositions)) {
-          closedPositions[order.productCode] = []
-        }
-
         var commissionPerUnit = 0
         if (!isNaN(order.commission)) {
           commissionPerUnit = order.commission / order.quantityChange
@@ -73,11 +68,21 @@ export default {
         for (let i = 0; i < order.quantityChange; i++) {
           var purchasePrice = openPositions[order.productCode].shift()
           var pl = order.averagePrice - purchasePrice
+          var year = order.date.substr(order.date.length - 4);
+
+          if (!(year in closedPositions)) {
+            closedPositions[year] = []
+          }
+
+          // Make sure closed product is in closed positions
+          if (!(order.productCode in closedPositions[year])) {
+            closedPositions[year][order.productCode] = []
+          }
 
           realizedPl += pl
 
           // Register closed position
-          closedPositions[order.productCode].push({
+          closedPositions[year][order.productCode].push({
             productCode: order.productCode,
             openPrice: purchasePrice,
             closePrice: order.averagePrice,
